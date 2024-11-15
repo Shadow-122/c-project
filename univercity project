@@ -1,0 +1,103 @@
+#include <iostream>
+using namespace std;
+
+const int MAX_BOOKS = 100;
+int bookCount = 0;
+string books[MAX_BOOKS];
+bool isIssued[MAX_BOOKS] = {false};
+
+void addBook() {
+    if (bookCount >= MAX_BOOKS) {
+        cout << "Library is full, cannot add more books.\n";
+        return;
+    }
+    cout << "Enter the book title: ";
+    cin.ignore();
+    getline(cin, books[bookCount]);
+    isIssued[bookCount] = false;
+    bookCount++;
+    cout << "Book added successfully.\n";
+}
+
+void issueBook() {
+    cout << "Enter the book title to issue: ";
+    string title;
+    cin.ignore();
+    getline(cin, title);
+
+    for (int i = 0; i < bookCount; i++) {
+        if (books[i] == title && !isIssued[i]) {
+            isIssued[i] = true;
+            cout << "Book issued successfully.\n";
+            return;
+        } else if (books[i] == title && isIssued[i]) {
+            cout << "Book is already issued.\n";
+            return;
+        }
+    }
+    cout << "Book not found in the library.\n";
+}
+
+void returnBook() {
+    cout << "Enter the book title to return: ";
+    string title;
+    cin.ignore();
+    getline(cin, title);
+
+    for (int i = 0; i < bookCount; i++) {
+        if (books[i] == title && isIssued[i]) {
+            isIssued[i] = false;
+            cout << "Book returned successfully.\n";
+            return;
+        } else if (books[i] == title && !isIssued[i]) {
+            cout << "Book was not issued.\n";
+            return;
+        }
+    }
+    cout << "Book not found in the library.\n";
+}
+
+void viewBooks() {
+    if (bookCount == 0) {
+        cout << "No books in the library.\n";
+        return;
+    }
+    cout << "Library Books:\n";
+    for (int i = 0; i < bookCount; i++) {
+        cout << i + 1 << ". " << books[i] << " - " << (isIssued[i] ? "Issued" : "Available") << endl;
+    }
+}
+
+int main() {
+    int choice;
+    while (true) {
+        cout << "\nLibrary Book Management System\n";
+        cout << "1. Add Book\n";
+        cout << "2. Issue Book\n";
+        cout << "3. Return Book\n";
+        cout << "4. View Books\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addBook();
+                break;
+            case 2:
+                issueBook();
+                break;
+            case 3:
+                returnBook();
+                break;
+            case 4:
+                viewBooks();
+                break;
+            case 5:
+                cout << "Exiting the program.\n";
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    }
+}
